@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#0b0b0f">
+<meta name="description" content="Your space. Your world.">
+<link rel="manifest" href="./manifest.json">
+<title>Narenu Hub</title>
+<style>
+* { box-sizing: border-box; }
+body {
+  margin: 0; background: #0b0b0f; color: #fff;
+  font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+}
+header { padding: 28px 22px; border-bottom: 1px solid #29232b; }
+.logo { color: #ff2448; font-size: 12px; letter-spacing: 3px; font-weight: bold; }
+h1 { font-size: 32px; margin: 12px 0 5px; }
+.sub, small, .date, footer { color: #a5a1ad; }
+main { max-width: 680px; padding: 22px; margin: auto; }
+.hero {
+  padding: 24px; border-radius: 20px; margin-bottom: 25px;
+  background: linear-gradient(135deg, #35101d, #17151d);
+  border: 1px solid #512333;
+}
+.eyebrow { color: #ff8297; font-size: 11px; letter-spacing: 2px; }
+.clock { font-size: 36px; font-weight: 750; margin: 12px 0 5px; }
+h2 { font-size: 18px; margin: 26px 0 14px; }
+.grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
+.tile {
+  display: flex; flex-direction: column; justify-content: space-between;
+  gap: 18px; min-height: 115px; padding: 17px;
+  background: #17171f; border: 1px solid #2b2b36;
+  border-radius: 16px; color: white; text-decoration: none;
+}
+.tile:active { border-color: #ff2448; }
+.symbol { font-size: 25px; color: #ff4764; }
+small { display: block; margin-top: 5px; font-size: 11px; }
+textarea {
+  width: 100%; min-height: 140px; padding: 15px;
+  background: #17171f; border: 1px solid #333340;
+  border-radius: 15px; color: white; font: inherit;
+}
+footer { text-align: center; padding: 28px 10px; font-size: 11px; }
+@media (min-width: 600px) {
+  .grid { grid-template-columns: repeat(3, 1fr); }
+}
+</style>
+</head>
+<body>
+<header>
+  <div class="logo">NH / PERSONAL SPACE</div>
+  <h1>Narenu Hub<span style="color:#ff2448">.</span></h1>
+  <div class="sub">Your space. Your world.</div>
+</header>
+<main>
+  <section class="hero">
+    <div class="eyebrow">WELCOME BACK</div>
+    <div class="clock" id="clock">--:--:--</div>
+    <div class="date" id="date">Loading date...</div>
+  </section>
+  <h2>Quick access</h2>
+  <section class="grid">
+    <a class="tile" href="https://www.google.com"><span class="symbol">⌕</span><span><strong>Google</strong><small>Search the web</small></span></a>
+    <a class="tile" href="https://www.youtube.com"><span class="symbol">▷</span><span><strong>YouTube</strong><small>Watch something</small></span></a>
+    <a class="tile" href="https://www.instagram.com"><span class="symbol">◎</span><span><strong>Instagram</strong><small>Your social space</small></span></a>
+    <a class="tile" href="https://web.whatsapp.com"><span class="symbol">◉</span><span><strong>WhatsApp</strong><small>Messages and calls</small></span></a>
+    <a class="tile" href="https://github.com"><span class="symbol">⌘</span><span><strong>GitHub</strong><small>Build your ideas</small></span></a>
+    <a class="tile" href="https://www.spotify.com"><span class="symbol">♫</span><span><strong>Spotify</strong><small>Music for your mood</small></span></a>
+  </section>
+  <h2>Personal notes</h2>
+  <textarea id="notes" placeholder="Write your thoughts and reminders..."></textarea>
+  <p class="date" id="status">Notes are stored on this device in this browser.</p>
+</main>
+<footer>NARENU HUB · MADE FOR YOUR WORLD</footer>
+<script>
+function updateClock() {
+  const now = new Date();
+  document.getElementById("clock").textContent =
+    now.toLocaleTimeString([], {hour:"2-digit", minute:"2-digit", second:"2-digit"});
+  document.getElementById("date").textContent =
+    now.toLocaleDateString([], {weekday:"long", day:"numeric", month:"long", year:"numeric"});
+}
+updateClock();
+setInterval(updateClock, 1000);
+
+const notes = document.getElementById("notes");
+const status = document.getElementById("status");
+try {
+  notes.value = localStorage.getItem("narenu-hub-notes") || "";
+  notes.addEventListener("input", () => {
+    try {
+      localStorage.setItem("narenu-hub-notes", notes.value);
+      status.textContent = "Saved on this device ✓";
+    } catch {
+      status.textContent = "Browser storage is unavailable.";
+    }
+  });
+} catch {
+  status.textContent = "Browser storage is unavailable.";
+}
+
+if ("serviceWorker" in navigator && location.protocol !== "file:") {
+  window.addEventListener("load", () => {
+    navigator.serviceWorker.register("./service-worker.js").catch(console.error);
+  });
+}
+</script>
+</body>
+</html>

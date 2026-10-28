@@ -1,0 +1,20 @@
+{
+  "id": "./",
+  "name": "Narenu Hub",
+  "short_name": "Narenu",
+  "description": "Your space. Your world.",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#0b0b0f",
+  "theme_color": "#0b0b0f",
+  "icons": [
+    {
+      "src": "./icon.svg.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    }
+  ]
+}
